@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Heading, VStack, Input, Button, useToast, Box, HStack, IconButton, Text } from "@chakra-ui/react";
 import { supabase, useUserFiles, useAddUserFile, useUpdateUserFile, useDeleteUserFile } from "../integrations/supabase/index.js";
 import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
