@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Container, Heading, Text, VStack, Box, FormControl, FormLabel, Input, Textarea, Button, HStack, IconButton, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Image } from "@chakra-ui/react";
-import { FaEdit, FaTrash, FaFileAlt } from "react-icons/fa";
+import { Container, Heading, Text, VStack, Box, FormControl, FormLabel, Input, Textarea, Button, HStack, IconButton, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Image, Flex, Spacer } from "@chakra-ui/react";
+import { FaEdit, FaTrash, FaFileAlt, FaTasks, FaFileUpload } from "react-icons/fa";
 import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 import { useTasks, useAddTask, useUpdateTask, useDeleteTask, useUserFiles, useAddUserFile, useUpdateUserFile, useDeleteUserFile, supabase } from "../integrations/supabase/index.js";
 
@@ -205,48 +205,19 @@ const Dashboard = () => {
   };
 
   return (
-    <Container centerContent>
-      <VStack spacing={4} w="full">
-        <Heading as="h1" size="2xl">Dashboard</Heading>
-        <Text fontSize="xl">Welcome, {session?.user?.email}!</Text>
-        <Text>Here you can manage your tasks and files.</Text>
+    <Container maxW="container.xl" p={4}>
+      <Flex as="nav" bg="teal.500" p={4} color="white" alignItems="center">
+        <Heading as="h1" size="lg">Dashboard</Heading>
+        <Spacer />
+        <Text>Welcome, {session?.user?.email}!</Text>
+      </Flex>
 
-        <Button colorScheme="teal" onClick={onOpen}>Add New Task</Button>
-
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>{editingTask ? "Update Task" : "Add New Task"}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <FormControl id="modal-task-name" isRequired>
-                <FormLabel>Task Name</FormLabel>
-                <Input
-                  placeholder="Enter task name"
-                  value={taskName}
-                  onChange={(e) => setTaskName(e.target.value)}
-                />
-              </FormControl>
-              <FormControl id="modal-task-description" mt={4}>
-                <FormLabel>Task Description</FormLabel>
-                <Textarea
-                  placeholder="Enter task description"
-                  value={taskDescription}
-                  onChange={(e) => setTaskDescription(e.target.value)}
-                />
-              </FormControl>
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="teal" mr={3} onClick={editingTask ? () => handleUpdateTask(editingTask) : handleAddTask}>
-                {editingTask ? "Update Task" : "Add Task"}
-              </Button>
-              <Button variant="ghost" onClick={handleCancelEdit}>Cancel</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
+      <VStack spacing={8} mt={4} w="full">
         <Box w="full" p={4} borderWidth={1} borderRadius="lg">
-          <Heading as="h2" size="lg" mb={4}>Your Tasks</Heading>
+          <HStack justifyContent="space-between" mb={4}>
+            <Heading as="h2" size="lg">Your Tasks</Heading>
+            <Button colorScheme="teal" onClick={onOpen}>Add New Task</Button>
+          </HStack>
           {isLoadingTasks ? (
             <Text>Loading tasks...</Text>
           ) : isErrorTasks ? (
@@ -276,9 +247,11 @@ const Dashboard = () => {
         </Box>
 
         <Box w="full" p={4} borderWidth={1} borderRadius="lg">
-          <Heading as="h2" size="lg" mb={4}>Your Files</Heading>
-          <Input type="file" onChange={handleFileChange} />
-          <Button colorScheme="teal" onClick={handleFileUpload}>Upload File</Button>
+          <HStack justifyContent="space-between" mb={4}>
+            <Heading as="h2" size="lg">Your Files</Heading>
+            <Input type="file" onChange={handleFileChange} />
+            <Button colorScheme="teal" onClick={handleFileUpload}>Upload File</Button>
+          </HStack>
           {isLoadingFiles ? (
             <Text>Loading files...</Text>
           ) : isErrorFiles ? (
@@ -331,6 +304,38 @@ const Dashboard = () => {
           )}
         </Box>
       </VStack>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{editingTask ? "Update Task" : "Add New Task"}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl id="modal-task-name" isRequired>
+              <FormLabel>Task Name</FormLabel>
+              <Input
+                placeholder="Enter task name"
+                value={taskName}
+                onChange={(e) => setTaskName(e.target.value)}
+              />
+            </FormControl>
+            <FormControl id="modal-task-description" mt={4}>
+              <FormLabel>Task Description</FormLabel>
+              <Textarea
+                placeholder="Enter task description"
+                value={taskDescription}
+                onChange={(e) => setTaskDescription(e.target.value)}
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="teal" mr={3} onClick={editingTask ? () => handleUpdateTask(editingTask) : handleAddTask}>
+              {editingTask ? "Update Task" : "Add Task"}
+            </Button>
+            <Button variant="ghost" onClick={handleCancelEdit}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };

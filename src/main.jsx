@@ -14,14 +14,14 @@ const colors = {
 
 const config = {
   initialColorMode: "dark",
-  useSystemColorMode: false,
+  useSystemColorMode: true,
 };
 
 const theme = extendTheme({ colors, config });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={extendTheme({ colors, config })}>
       <SupabaseProvider>
         <App />
       </SupabaseProvider>
