@@ -245,93 +245,96 @@ const Dashboard = () => {
           </ModalContent>
         </Modal>
 
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="full">
-          <Box p={4} borderWidth={1} borderRadius="lg">
-            <Heading as="h2" size="lg" mb={4}>Your Tasks</Heading>
-            {isLoadingTasks ? (
-              <Text>Loading tasks...</Text>
-            ) : isErrorTasks ? (
-              <Text>Error loading tasks.</Text>
-            ) : (
-              tasks.map((task) => (
-                <Box key={task.id} p={4} borderWidth={1} borderRadius="lg" mb={4}>
-                  <HStack justifyContent="space-between">
-                    <Box>
-                      <Text fontSize="xl" fontWeight="bold">{task.task_name}</Text>
-                      <Text>{task.task_description}</Text>
-                    </Box>
-                    <HStack>
-                      <IconButton
-                        icon={<FaEdit />}
-                        onClick={() => handleEditClick(task)}
-                      />
-                      <IconButton
-                        icon={<FaTrash />}
-                        onClick={() => handleDeleteTask(task.id)}
-                      />
-                    </HStack>
-                  </HStack>
-                </Box>
-              ))
-            )}
-          </Box>
-
-          <Box p={4} borderWidth={1} borderRadius="lg">
-            <Heading as="h2" size="lg" mb={4}>Your Files</Heading>
-            <Input type="file" onChange={handleFileChange} />
-            <Button colorScheme="teal" onClick={handleFileUpload}>Upload File</Button>
-            {isLoadingFiles ? (
-              <Text>Loading files...</Text>
-            ) : isErrorFiles ? (
-              <Text>Error loading files.</Text>
-            ) : (
-              userFiles.map((file) => (
-                <Box key={file.id} p={4} borderWidth={1} borderRadius="lg" mb={4}>
-                  <HStack justifyContent="space-between">
-                    <Box>
-                      {editingFile && editingFile.id === file.id ? (
-                        <Input
-                          value={newFileName}
-                          onChange={(e) => setNewFileName(e.target.value)}
+        <Box p={4} borderWidth={1} borderRadius="lg" w="full">
+          <Heading as="h2" size="lg" mb={4}>Your Tasks and Files</Heading>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="full">
+            <Box>
+              <Heading as="h3" size="md" mb={4}>Tasks</Heading>
+              {isLoadingTasks ? (
+                <Text>Loading tasks...</Text>
+              ) : isErrorTasks ? (
+                <Text>Error loading tasks.</Text>
+              ) : (
+                tasks.map((task) => (
+                  <Box key={task.id} p={4} borderWidth={1} borderRadius="lg" mb={4}>
+                    <HStack justifyContent="space-between">
+                      <Box>
+                        <Text fontSize="xl" fontWeight="bold">{task.task_name}</Text>
+                        <Text>{task.task_description}</Text>
+                      </Box>
+                      <HStack>
+                        <IconButton
+                          icon={<FaEdit />}
+                          onClick={() => handleEditClick(task)}
                         />
-                      ) : (
-                        <>
-                          {file.file_name.split('.').pop().match(/(jpg|jpeg|png|gif)$/i) ? (
-                            <Image src={file.file_url} alt={file.file_name} boxSize={{ base: "50px", md: "100px" }} objectFit="cover" />
-                          ) : (
-                            <HStack>
-                              <FaFileAlt />
-                              <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
-                            </HStack>
-                          )}
-                        </>
-                      )}
-                    </Box>
-                    <HStack>
-                      {editingFile && editingFile.id === file.id ? (
-                        <>
-                          <Button onClick={() => handleFileRename(file)}>Save</Button>
-                          <Button onClick={handleCancelFileEdit}>Cancel</Button>
-                        </>
-                      ) : (
-                        <>
-                          <IconButton
-                            icon={<FaEdit />}
-                            onClick={() => handleEditFileClick(file)}
-                          />
-                          <IconButton
-                            icon={<FaTrash />}
-                            onClick={() => handleFileDelete(file.id)}
-                          />
-                        </>
-                      )}
+                        <IconButton
+                          icon={<FaTrash />}
+                          onClick={() => handleDeleteTask(task.id)}
+                        />
+                      </HStack>
                     </HStack>
-                  </HStack>
-                </Box>
-              ))
-            )}
-          </Box>
-        </SimpleGrid>
+                  </Box>
+                ))
+              )}
+            </Box>
+
+            <Box>
+              <Heading as="h3" size="md" mb={4}>Files</Heading>
+              <Input type="file" onChange={handleFileChange} />
+              <Button colorScheme="teal" onClick={handleFileUpload}>Upload File</Button>
+              {isLoadingFiles ? (
+                <Text>Loading files...</Text>
+              ) : isErrorFiles ? (
+                <Text>Error loading files.</Text>
+              ) : (
+                userFiles.map((file) => (
+                  <Box key={file.id} p={4} borderWidth={1} borderRadius="lg" mb={4}>
+                    <HStack justifyContent="space-between">
+                      <Box>
+                        {editingFile && editingFile.id === file.id ? (
+                          <Input
+                            value={newFileName}
+                            onChange={(e) => setNewFileName(e.target.value)}
+                          />
+                        ) : (
+                          <>
+                            {file.file_name.split('.').pop().match(/(jpg|jpeg|png|gif)$/i) ? (
+                              <Image src={file.file_url} alt={file.file_name} boxSize={{ base: "50px", md: "100px" }} objectFit="cover" />
+                            ) : (
+                              <HStack>
+                                <FaFileAlt />
+                                <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
+                              </HStack>
+                            )}
+                          </>
+                        )}
+                      </Box>
+                      <HStack>
+                        {editingFile && editingFile.id === file.id ? (
+                          <>
+                            <Button onClick={() => handleFileRename(file)}>Save</Button>
+                            <Button onClick={handleCancelFileEdit}>Cancel</Button>
+                          </>
+                        ) : (
+                          <>
+                            <IconButton
+                              icon={<FaEdit />}
+                              onClick={() => handleEditFileClick(file)}
+                            />
+                            <IconButton
+                              icon={<FaTrash />}
+                              onClick={() => handleFileDelete(file.id)}
+                            />
+                          </>
+                        )}
+                      </HStack>
+                    </HStack>
+                  </Box>
+                ))
+              )}
+            </Box>
+          </SimpleGrid>
+        </Box>
       </VStack>
     </Container>
   );

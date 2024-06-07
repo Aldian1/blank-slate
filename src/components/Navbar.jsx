@@ -1,11 +1,12 @@
 import { Box, Flex, Link, Button, useColorModeValue, Stack, useColorMode, HStack } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 
 export default function Navbar() {
   const { session, logout } = useSupabaseAuth();
   const { colorMode, toggleColorMode } = useColorMode();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -27,7 +28,7 @@ export default function Navbar() {
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
               <Button
-                onClick={session ? logout : () => window.location.href = "/login"}
+                onClick={session ? logout : () => navigate("/")}
                 colorScheme={session ? "red" : "teal"}
                 variant="solid"
               >

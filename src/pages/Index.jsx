@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Box, Heading, VStack, Button } from "@chakra-ui/react";
 import { SupabaseAuthUI, useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 
-const Login = () => {
+const Index = () => {
   const { session } = useSupabaseAuth();
   const navigate = useNavigate();
 
@@ -30,4 +30,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Index;
