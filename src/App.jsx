@@ -1,6 +1,5 @@
 import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import Index from "./pages/Index.jsx";
-import Signup from "./pages/Signup.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Files from "./pages/Files.jsx";
 import { SupabaseAuthProvider, useSupabaseAuth } from "./integrations/supabase/auth.jsx";
@@ -18,7 +17,6 @@ function App() {
         <Navbar />
         <Routes>
           <Route exact path="/" element={<Index />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path="/files" element={<PrivateRoute><Files /></PrivateRoute>} />
         </Routes>
