@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Heading, VStack, Input, Button, useToast, Box, HStack, IconButton, Text, Image } from "@chakra-ui/react";
+import { Container, Heading, VStack, Input, Button, useToast, Box, HStack, IconButton, Text } from "@chakra-ui/react";
 import { supabase, useUserFiles, useAddUserFile, useUpdateUserFile, useDeleteUserFile } from "../integrations/supabase/index.js";
 import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 import { FaEdit, FaTrash, FaFileAlt } from "react-icons/fa";
@@ -137,13 +137,13 @@ const Files = () => {
                     ) : (
                       <>
                         {file.file_name.split('.').pop().match(/(jpg|jpeg|png|gif)$/i) ? (
-                      <Image src={file.file_url} alt={file.file_name} boxSize={{ base: "50px", md: "100px" }} objectFit="cover" />
-                    ) : (
-                      <HStack>
-                        <FaFileAlt />
-                        <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
-                      </HStack>
-                    )}
+                          <img src={file.file_url} alt={file.file_name} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                        ) : (
+                          <HStack>
+                            <FaFileAlt />
+                            <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
+                          </HStack>
+                        )}
                       </>
                     )}
                   </Box>
