@@ -6,7 +6,7 @@ import { FaEdit, FaTrash, FaFileAlt } from "react-icons/fa";
 
 const Files = () => {
   const { session } = useSupabaseAuth();
-  const { data: userFiles, isLoading, isError } = useUserFiles();
+  const { data: userFiles, isLoading, isError } = useUserFiles(session.user.id);
   const addUserFile = useAddUserFile();
   const updateUserFile = useUpdateUserFile();
   const deleteUserFile = useDeleteUserFile();
@@ -44,7 +44,7 @@ const Files = () => {
         isClosable: true,
       });
     } else {
-      const fileUrl = `${supabase.storage.from('user_files').getPublicUrl(fileName).publicURL}`;
+      const fileUrl = supabase.storage.from('user_files').getPublicUrl(fileName).publicURL;
       await addUserFile.mutateAsync({ user_id: session.user.id, file_name: fileName, file_description: "", file_url: fileUrl });
       toast({
         title: "File uploaded.",
