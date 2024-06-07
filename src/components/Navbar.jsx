@@ -18,6 +18,7 @@ export default function Navbar() {
               
               {session && <Link as={RouterLink} to="/dashboard">Dashboard</Link>}
               {session && <Link as={RouterLink} to="/files">Files</Link>}
+              {!session && <Link as={RouterLink} to="/about">About</Link>}
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>
@@ -25,13 +26,13 @@ export default function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
-              {session ? (
-                <Button onClick={logout}>Logout</Button>
-              ) : (
-                <Link as={RouterLink} to="/signup">
-                  <Button>Sign Up</Button>
-                </Link>
-              )}
+              <Button
+                onClick={session ? logout : () => window.location.href = "/login"}
+                colorScheme={session ? "red" : "teal"}
+                variant="solid"
+              >
+                {session ? "Logout" : "Login / Sign Up"}
+              </Button>
             </Stack>
           </Flex>
         </Flex>
