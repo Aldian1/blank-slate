@@ -18,6 +18,7 @@ export default function Navbar() {
               {!session && <Link as={RouterLink} to="/login">Login</Link>}
               {!session && <Link as={RouterLink} to="/signup">Signup</Link>}
               {session && <Link as={RouterLink} to="/dashboard">Dashboard</Link>}
+              {session && <Link as={RouterLink} to="/files">Files</Link>}
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>
