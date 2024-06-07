@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Container, Heading, VStack, Input, Button, useToast, Box, HStack, IconButton, Text } from "@chakra-ui/react";
+import { Container, Heading, VStack, Input, Button, useToast, Box, HStack, IconButton, Text, Image } from "@chakra-ui/react";
 import { supabase, useUserFiles, useAddUserFile, useUpdateUserFile, useDeleteUserFile } from "../integrations/supabase/index.js";
 import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaFileAlt } from "react-icons/fa";
 
 const Files = () => {
   const { session } = useSupabaseAuth();
@@ -33,7 +33,7 @@ const Files = () => {
 
     const fileExt = file.name.split('.').pop();
     const fileName = `${session.user.id}/${Date.now()}.${fileExt}`;
-    const { error } = await supabase.storage.from('user_files').upload(fileName, file);
+    const { data, error } = await supabase.storage.from('user_files').upload(fileName, file);
 
     if (error) {
       toast({
@@ -44,7 +44,8 @@ const Files = () => {
         isClosable: true,
       });
     } else {
-      await addUserFile.mutateAsync({ user_id: session.user.id, file_name: fileName, file_description: "" });
+      const fileUrl = `${supabase.storage.from('user_files').getPublicUrl(fileName).publicURL}`;
+      await addUserFile.mutateAsync({ user_id: session.user.id, file_name: fileName, file_description: "", file_url: fileUrl });
       toast({
         title: "File uploaded.",
         description: "Your file has been uploaded successfully.",
@@ -134,7 +135,16 @@ const Files = () => {
                         onChange={(e) => setNewFileName(e.target.value)}
                       />
                     ) : (
-                      <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
+                      <>
+                        {file.file_name.split('.').pop().match(/(jpg|jpeg|png|gif)$/i) ? (
+                          <Image src={file.file_url} alt={file.file_name} boxSize={{ base: "50px", md: "100px" }} objectFit="cover" />
+                        ) : (
+                          <HStack>
+                            <FaFileAlt />
+                            <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
+                          </HStack>
+                        )}
+                      </>
                     )}
                   </Box>
                   <HStack>
