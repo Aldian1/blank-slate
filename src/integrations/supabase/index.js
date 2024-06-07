@@ -1,3 +1,29 @@
+/**
+ * Types for Supabase Tables
+ * 
+ * Table: user_data
+ * Columns:
+ * - id: bigint (Primary Key)
+ * - created_at: timestamp with time zone
+ * - user_data: json
+ * 
+ * Table: tasks
+ * Columns:
+ * - id: bigint (Primary Key)
+ * - created_at: timestamp with time zone
+ * - user_id: uuid
+ * - task_name: text
+ * - task_description: text
+ * 
+ * Table: user_files
+ * Columns:
+ * - id: bigint (Primary Key)
+ * - created_at: timestamp with time zone
+ * - user_id: uuid
+ * - file_name: text
+ * - file_description: text
+ */
+
 import { createClient } from '@supabase/supabase-js';
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -85,6 +111,42 @@ export const useDeleteTask = () => {
         mutationFn: (id) => fromSupabase(supabase.from('tasks').delete().eq('id', id)),
         onSuccess: () => {
             queryClient.invalidateQueries('tasks');
+        },
+    });
+};
+
+// Hooks for UserFiles table
+export const useUserFiles = () => useQuery({
+    queryKey: ['user_files'],
+    queryFn: () => fromSupabase(supabase.from('user_files').select('*')),
+});
+
+export const useAddUserFile = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (newUserFile) => fromSupabase(supabase.from('user_files').insert([newUserFile])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('user_files');
+        },
+    });
+};
+
+export const useUpdateUserFile = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (updatedUserFile) => fromSupabase(supabase.from('user_files').update(updatedUserFile).eq('id', updatedUserFile.id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('user_files');
+        },
+    });
+};
+
+export const useDeleteUserFile = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id) => fromSupabase(supabase.from('user_files').delete().eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('user_files');
         },
     });
 };
