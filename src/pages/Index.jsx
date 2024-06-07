@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Box, Heading } from "@chakra-ui/react";
+import { Container, Box, Heading, VStack, Text } from "@chakra-ui/react";
 import { SupabaseAuthUI, useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 
 const Index = () => {
@@ -15,12 +15,17 @@ const Index = () => {
 
   return (
     <Container centerContent>
-      <Box p={4} maxW="md" w="full">
-        <Heading as="h2" size="xl" mb={6} textAlign="center">
-          Login
+      <VStack spacing={8} p={4} maxW="md" w="full">
+        <Heading as="h1" size="2xl" textAlign="center">
+          Welcome to Our App
         </Heading>
-        <SupabaseAuthUI />
-      </Box>
+        <Text fontSize="lg" textAlign="center">
+          Please log in to continue
+        </Text>
+        <Box w="full">
+          <SupabaseAuthUI />
+        </Box>
+      </VStack>
     </Container>
   );
 };

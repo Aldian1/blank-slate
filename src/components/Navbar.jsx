@@ -25,13 +25,9 @@ export default function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
-              {session ? (
-                <Button onClick={logout}>Logout</Button>
-              ) : (
-                <Link as={RouterLink} to="/signup">
-                  <Button>Sign Up</Button>
-                </Link>
-              )}
+              <Button onClick={session ? logout : () => window.location.href = '/signup'}>
+                {session ? "Logout" : "Sign Up"}
+              </Button>
             </Stack>
           </Flex>
         </Flex>
