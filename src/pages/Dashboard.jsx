@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Heading, Text, VStack, Box, FormControl, FormLabel, Input, Textarea, Button, HStack, IconButton, useToast } from "@chakra-ui/react";
+import { Container, Heading, Text, VStack, Box, FormControl, FormLabel, Input, Textarea, Button, HStack, IconButton, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 import { useTasks, useAddTask, useUpdateTask, useDeleteTask } from "../integrations/supabase/index.js";
@@ -11,6 +11,7 @@ const Dashboard = () => {
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
@@ -21,6 +22,7 @@ const Dashboard = () => {
       await addTask.mutateAsync({ task_name: taskName, task_description: taskDescription, user_id: session.user.id });
       setTaskName("");
       setTaskDescription("");
+      onClose();
       toast({
         title: "Task created.",
         description: "Your task has been created successfully.",
@@ -45,6 +47,7 @@ const Dashboard = () => {
       setEditingTask(null);
       setTaskName("");
       setTaskDescription("");
+      onClose();
       toast({
         title: "Task updated.",
         description: "Your task has been updated successfully.",
@@ -88,12 +91,14 @@ const Dashboard = () => {
     setEditingTask(task);
     setTaskName(task.task_name);
     setTaskDescription(task.task_description);
+    onOpen();
   };
 
   const handleCancelEdit = () => {
     setEditingTask(null);
     setTaskName("");
     setTaskDescription("");
+    onClose();
   };
 
   return (
@@ -103,36 +108,39 @@ const Dashboard = () => {
         <Text fontSize="xl">Welcome, {session?.user?.email}!</Text>
         <Text>Here you can manage your tasks and view your progress.</Text>
 
-        <Box w="full" p={4} borderWidth={1} borderRadius="lg">
-          <FormControl id="task-name" isRequired>
-            <FormLabel>Task Name</FormLabel>
-            <Input
-              placeholder="Enter task name"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-            />
-          </FormControl>
-          <FormControl id="task-description" mt={4}>
-            <FormLabel>Task Description</FormLabel>
-            <Textarea
-              placeholder="Enter task description"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-            />
-          </FormControl>
-          <Button
-            mt={4}
-            colorScheme="teal"
-            onClick={editingTask ? () => handleUpdateTask(editingTask) : handleAddTask}
-          >
-            {editingTask ? "Update Task" : "Add Task"}
-          </Button>
-          {editingTask && (
-            <Button mt={4} ml={2} onClick={handleCancelEdit}>
-              Cancel
-            </Button>
-          )}
-        </Box>
+        <Button colorScheme="teal" onClick={onOpen}>Add New Task</Button>
+
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>{editingTask ? "Update Task" : "Add New Task"}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl id="modal-task-name" isRequired>
+                <FormLabel>Task Name</FormLabel>
+                <Input
+                  placeholder="Enter task name"
+                  value={taskName}
+                  onChange={(e) => setTaskName(e.target.value)}
+                />
+              </FormControl>
+              <FormControl id="modal-task-description" mt={4}>
+                <FormLabel>Task Description</FormLabel>
+                <Textarea
+                  placeholder="Enter task description"
+                  value={taskDescription}
+                  onChange={(e) => setTaskDescription(e.target.value)}
+                />
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="teal" mr={3} onClick={editingTask ? () => handleUpdateTask(editingTask) : handleAddTask}>
+                {editingTask ? "Update Task" : "Add Task"}
+              </Button>
+              <Button variant="ghost" onClick={handleCancelEdit}>Cancel</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
 
         <Box w="full" p={4} borderWidth={1} borderRadius="lg">
           <Heading as="h2" size="lg" mb={4}>Your Tasks</Heading>
