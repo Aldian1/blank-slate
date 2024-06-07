@@ -13,7 +13,7 @@ export default function Navbar() {
     if (session) {
       logout();
     } else {
-      navigate('/signup');
+      navigate('/login');
     }
   };
 
