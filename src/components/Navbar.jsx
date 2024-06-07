@@ -15,8 +15,7 @@ export default function Navbar() {
             <Box>Logo</Box>
             <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
               <Link as={RouterLink} to="/">Home</Link>
-              {!session && <Link as={RouterLink} to="/login">Login</Link>}
-              {!session && <Link as={RouterLink} to="/signup">Signup</Link>}
+              
               {session && <Link as={RouterLink} to="/dashboard">Dashboard</Link>}
               {session && <Link as={RouterLink} to="/files">Files</Link>}
             </HStack>
@@ -26,7 +25,13 @@ export default function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
-              {session && <Button onClick={logout}>Logout</Button>}
+              {session ? (
+                <Button onClick={logout}>Logout</Button>
+              ) : (
+                <Link as={RouterLink} to="/signup">
+                  <Button>Sign Up</Button>
+                </Link>
+              )}
             </Stack>
           </Flex>
         </Flex>

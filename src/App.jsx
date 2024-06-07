@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar.jsx";
 
 function PrivateRoute({ children }) {
   const { session } = useSupabaseAuth();
-  return session ? children : <Navigate to="/login" />;
+  return session ? children : <Navigate to="/" />;
 }
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
           <Route exact path="/" element={<Index />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-          <Route path="/files" element={<Files />} />
+          <Route path="/files" element={<PrivateRoute><Files /></PrivateRoute>} />
         </Routes>
       </Router>
     </SupabaseAuthProvider>
