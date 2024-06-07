@@ -137,13 +137,13 @@ const Files = () => {
                     ) : (
                       <>
                         {file.file_name.split('.').pop().match(/(jpg|jpeg|png|gif)$/i) ? (
-                          <Image src={file.file_url} alt={file.file_name} boxSize={{ base: "50px", md: "100px" }} objectFit="cover" />
-                        ) : (
-                          <HStack>
-                            <FaFileAlt />
-                            <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
-                          </HStack>
-                        )}
+                      <Image src={file.file_url} alt={file.file_name} boxSize={{ base: "50px", md: "100px" }} objectFit="cover" />
+                    ) : (
+                      <HStack>
+                        <FaFileAlt />
+                        <Text fontSize="xl" fontWeight="bold">{file.file_name}</Text>
+                      </HStack>
+                    )}
                       </>
                     )}
                   </Box>
